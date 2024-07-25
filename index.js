@@ -1,6 +1,7 @@
 const cors = require('cors');
 const express = require('express');
 const todos = require('./routes/todos');
+const sequelize = require('./database/database');
 
 const app = express();
 
@@ -10,16 +11,15 @@ app.use(cors({
 }));
 app.use(express.urlencoded());
 app.use(express.json());
-// app.use((...args) => {
-//     return args;
-// })
 
 app.use('/todos', todos);
 // todos/all GET
 // todos/post POST
 
 
-const start = () => {
+const start = async () => {
+    await sequelize.sync();
+
     app.listen(3333, () => {
         console.log('SERVER IS RUNNING ON PORT: 3333');
     });

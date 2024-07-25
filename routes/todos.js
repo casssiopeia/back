@@ -1,33 +1,29 @@
-const express = require('express');
-
+const express = require("express");
+const Todo = require("../database/models/todo");
+const { where } = require("sequelize");
 
 const router = express.Router();
 
-router.get('/all', (request, response) => {
-    response.json({message: 'ok', data: {a: 1}});
-    response.status(200);
-    response.send();
+router.get("/all", (request, response) => {
+  Todo.findAll().then((todos) => {
+    response.json(todos);
+  });
 });
 
-router.post('/all', (request, response) => {   
-    const id = request.body;
+router.post("/all", (request, response) => {
+  const { todoText } = request.body;
 
-    console.log(id);
-
-    if (isNaN(id)) {
-        response.json({error: 'id is not a number'});
-        response.status(400);
-    } else if (id % 2 === 0) {
-        response.json({data: 'even'});
-        response.status(200);
-    } else if (id % 2 !== 0) {
-        response.json({data: 'odd'});
-        response.status(200);
-    }
-
-    response.send();
+  Todo.create({ title: todoText, completed: false }).then((data) => {
+    response.json(data.dataValues);
+  });
 });
 
+router.patch("/:id", (request, response) => {
+  const todoId = request.params.id;
+  // TODO: апдейтнуть тудуху
+  Todo.update({ where: { id: todoId } }).then((data) => {
+    console.log(data);
+  });
+});
 
 module.exports = router;
-
