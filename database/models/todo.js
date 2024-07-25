@@ -12,4 +12,11 @@ const Todo = sequelize.define('todo', {
     }
 });
 
+<<<<<<< HEAD
 module.exports = Todo;
+=======
+
+module.exports = Todo;
+
+
+>>>>>>> 7235040bd65ab14da753395bc3a542d97789441f
