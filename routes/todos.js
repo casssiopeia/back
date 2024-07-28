@@ -24,21 +24,21 @@ router.patch("/:id", async (request, response) => {
   const todo = await Todo.findByPk(id);
 
   if (!todo) {
-    response.json({error: 'todo not found'});
+    response.json({error: 'todo not found'})
     return;
   }
-  
+
   await todo.update({completed: !completed});
 
   response.json(todo);
 });
 
 router.delete('/:id', async (request, response) => {
-  const todoId = await request.params.id;
+  const todoId = request.params.id;
 
-  const todo = Todo.findByPk(todoId);
+  const todo = await Todo.findByPk(todoId);
 
-  todo.destroy();
+  await todo.destroy();
 
   response.status(202).json({result: 'ok'});
 });
