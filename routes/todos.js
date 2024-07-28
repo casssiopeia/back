@@ -18,12 +18,29 @@ router.post("/all", (request, response) => {
   });
 });
 
-router.patch("/:id", (request, response) => {
+router.patch("/:id", async (request, response) => {
+  const {id, completed} = request.body;
+
+  const todo = await Todo.findByPk(id);
+
+  if (!todo) {
+    response.json({error: 'todo not found'})
+    return;
+  }
+
+  await todo.update({completed: !completed});
+
+  response.json(todo);
+});
+
+router.delete('/:id', async (request, response) => {
   const todoId = request.params.id;
-  // TODO: апдейтнуть тудуху
-  Todo.update({ where: { id: todoId } }).then((data) => {
-    console.log(data);
-  });
+
+  const todo = await Todo.findByPk(todoId);
+
+  await todo.destroy();
+
+  response.status(202).json({result: 'ok'});
 });
 
 module.exports = router;
